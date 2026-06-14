@@ -2,65 +2,83 @@
 name: web-development
 description: "Modern web development reference and skill: standards, layouts, color systems, accessibility, performance, and responsive design patterns for building high-quality websites."
 version: 1.0.0
-author: Tim
+author: Andrew S Erwin
+license: MIT
 platforms: [linux, macos, windows]
 metadata:
   enchanter:
-    tags: [web, css, html, accessibility, performance, responsive, design-systems, color-theory, layouts, seo]
+    tags:
+      [
+        web,
+        css,
+        html,
+        accessibility,
+        performance,
+        responsive,
+        design-systems,
+        color-theory,
+        layouts,
+        seo,
+      ]
     related_skills: [blog-post-publish, add-site-demo]
 ---
 
 # Modern Web Development Reference
 
-A comprehensive reference for building modern, high-quality websites. Grounded in 2024–2026 web standards, accessibility laws, performance budgets, and contemporary design practice.
+A comprehensive reference for building modern, high-quality websites. Grounded
+in 2024–2026 web standards, accessibility laws, performance budgets, and contemporary
+design practice.
 
 ## 1. Color Systems
 
 ### 1.1 The Modern Approach: OKLCH + CSS Custom Properties
 
-**Use OKLCH** as the primary color space for defining palettes. Unlike HSL, OKLCH is perceptually uniform — equal numeric steps produce equal visual steps. This eliminates the "HSL lightness lie" where `hsl(0, 0%, 50%)` and `hsl(240, 100%, 50%)` look wildly different in perceived brightness despite identical L values.
+**Use OKLCH** as the primary color space for defining palettes. Unlike HSL, OKLCH
+is perceptually uniform — equal numeric steps produce equal visual steps. This
+eliminates the "HSL lightness lie" where `hsl(0, 0%, 50%)` and `hsl(240, 100%, 50%)`
+look wildly different in perceived brightness despite identical L values.
 
 ```css
 /* Define palette in OKLCH, then expose as custom properties */
 :root {
   /* Neutral ramp — perceptually uniform steps */
-  --gray-50:  oklch(98% 0.002 260);
+  --gray-50: oklch(98% 0.002 260);
   --gray-100: oklch(96% 0.004 260);
   --gray-200: oklch(90% 0.006 260);
   --gray-300: oklch(80% 0.008 260);
-  --gray-400: oklch(65% 0.010 260);
+  --gray-400: oklch(65% 0.01 260);
   --gray-500: oklch(50% 0.012 260);
   --gray-600: oklch(38% 0.014 260);
   --gray-700: oklch(28% 0.014 260);
   --gray-800: oklch(20% 0.012 260);
-  --gray-900: oklch(14% 0.010 260);
+  --gray-900: oklch(14% 0.01 260);
   --gray-950: oklch(08% 0.008 260);
 
   /* Accent — pick a hue, vary lightness */
-  --accent-50:  oklch(95% 0.15 160);
+  --accent-50: oklch(95% 0.15 160);
   --accent-400: oklch(70% 0.18 160);
-  --accent-500: oklch(60% 0.20 160);
+  --accent-500: oklch(60% 0.2 160);
   --accent-600: oklch(50% 0.22 160);
-  --accent-700: oklch(40% 0.20 160);
+  --accent-700: oklch(40% 0.2 160);
 }
 ```
 
 **Why OKLCH over alternatives:**
 
-| Property | OKLCH | HSL | LAB | sRGB hex |
-|----------|-------|-----|-----|----------|
-| Perceptually uniform | Yes | No | Partially (a/b hues skew) | No |
-| Wide gamut (P3+) | Yes | No (clips to sRGB) | Yes | No |
-| Intuitive hue rotation | Yes (constant chroma) | Yes (but bad lightness) | No (a/b axes) | No |
-| Browser support | 95%+ (2024+) | Universal | 95%+ | Universal |
-| Interpolation quality | Excellent | Poor | Good | Poor |
+| Property               | OKLCH                 | HSL                     | LAB                       | sRGB hex  |
+| ---------------------- | --------------------- | ----------------------- | ------------------------- | --------- |
+| Perceptually uniform   | Yes                   | No                      | Partially (a/b hues skew) | No        |
+| Wide gamut (P3+)       | Yes                   | No (clips to sRGB)      | Yes                       | No        |
+| Intuitive hue rotation | Yes (constant chroma) | Yes (but bad lightness) | No (a/b axes)             | No        |
+| Browser support        | 95%+ (2024+)          | Universal               | 95%+                      | Universal |
+| Interpolation quality  | Excellent             | Poor                    | Good                      | Poor      |
 
 **Fallback strategy for old browsers:**
 
 ```css
 :root {
   --accent-500: #22c55e; /* sRGB fallback */
-  --accent-500: oklch(62% 0.20 145); /* modern browsers override */
+  --accent-500: oklch(62% 0.2 145); /* modern browsers override */
 }
 ```
 
@@ -68,16 +86,17 @@ A comprehensive reference for building modern, high-quality websites. Grounded i
 
 **WCAG 2.2 minimum contrast ratios** (enforce these as hard constraints):
 
-| Element type | AA minimum | AAA target |
-|-------------|-----------|-----------|
-| Body text | 4.5:1 | 7:1 |
-| Large text (>18px bold / >24px) | 3:1 | 4.5:1 |
-| UI components & graphical objects | 3:1 | 4.5:1 |
-| Focus indicators | 3:1 | 4.5:1 |
+| Element type                      | AA minimum | AAA target |
+| --------------------------------- | ---------- | ---------- |
+| Body text                         | 4.5:1      | 7:1        |
+| Large text (>18px bold / >24px)   | 3:1        | 4.5:1      |
+| UI components & graphical objects | 3:1        | 4.5:1      |
+| Focus indicators                  | 3:1        | 4.5:1      |
 
 **Dark mode specific rules:**
 
-- Never use pure `#000` backgrounds with `#fff` text — the contrast is too harsh (21:1), causing eye strain and halation. Target 12:1–16:1.
+- Never use pure `#000` backgrounds with `#fff` text — the contrast is too harsh
+  (21:1), causing eye strain and halation. Target 12:1–16:1.
 - Use off-black backgrounds: `#0a0a0a` to `#1a1a1a` with `#d0d0d0` to `#e0e0e0` text.
 - Dim secondary text to 65–75% of foreground brightness (not pure gray — maintain slight hue).
 - Borders should be visible but not dominant: `#2a2a2a` to `#333` on `#0a0a0a` backgrounds.
@@ -98,25 +117,25 @@ A comprehensive reference for building modern, high-quality websites. Grounded i
 ```css
 /* Define semantic tokens, not colors directly */
 :root {
-  --color-bg:         var(--gray-950);
-  --color-surface:    var(--gray-900);
-  --color-border:     var(--gray-800);
-  --color-text:       var(--gray-100);
-  --color-text-dim:   var(--gray-400);
-  --color-accent:     var(--accent-500);
-  --color-accent-dim:  var(--accent-700);
-  --color-link:       var(--cyan-400);
-  --color-error:      var(--red-400);
-  --color-success:    var(--accent-400);
+  --color-bg: var(--gray-950);
+  --color-surface: var(--gray-900);
+  --color-border: var(--gray-800);
+  --color-text: var(--gray-100);
+  --color-text-dim: var(--gray-400);
+  --color-accent: var(--accent-500);
+  --color-accent-dim: var(--accent-700);
+  --color-link: var(--cyan-400);
+  --color-error: var(--red-400);
+  --color-success: var(--accent-400);
 }
 
 [data-theme="light"] {
-  --color-bg:         var(--gray-50);
-  --color-surface:    var(--gray-100);
-  --color-border:     var(--gray-200);
-  --color-text:       var(--gray-900);
-  --color-text-dim:   var(--gray-600);
-  --color-accent:     var(--accent-600);
+  --color-bg: var(--gray-50);
+  --color-surface: var(--gray-100);
+  --color-border: var(--gray-200);
+  --color-text: var(--gray-900);
+  --color-text-dim: var(--gray-600);
+  --color-accent: var(--accent-600);
   /* Accent hue shifts darker on light backgrounds */
 }
 ```
@@ -127,10 +146,16 @@ A comprehensive reference for building modern, high-quality websites. Grounded i
 
 ```css
 /* ✅ GOOD — semantic, themeable */
-.button { background: var(--color-accent); color: var(--color-bg); }
+.button {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
 
 /* ❌ BAD — hardcoded, unthemeable */
-.button { background: #4ade80; color: #0a0a0a; }
+.button {
+  background: #4ade80;
+  color: #0a0a0a;
+}
 ```
 
 **Token hierarchy:**
@@ -193,11 +218,15 @@ Container queries (`@container`) are now supported in all modern browsers and ar
 }
 
 @container card (min-width: 400px) {
-  .card { grid-template-columns: 1fr 2fr; }
+  .card {
+    grid-template-columns: 1fr 2fr;
+  }
 }
 
 @container card (max-width: 399px) {
-  .card { grid-template-columns: 1fr; }
+  .card {
+    grid-template-columns: 1fr;
+  }
 }
 ```
 
@@ -275,23 +304,25 @@ CSS nesting is now supported in all modern browsers without preprocessor:
 **System font stack** (zero network requests, instant render):
 
 ```css
-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-  Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+font-family:
+  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+  Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 ```
 
 **Monospace stack** (for code/terminal aesthetics):
 
 ```css
-font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Monaco,
-  'Cascadia Code', 'Roboto Mono', Menlo, Consolas, monospace;
+font-family:
+  "JetBrains Mono", ui-monospace, "SF Mono", Monaco, "Cascadia Code",
+  "Roboto Mono", Menlo, Consolas, monospace;
 ```
 
 **Web font loading best practices:**
 
 ```css
 @font-face {
-  font-family: 'Custom Font';
-  src: url('/fonts/custom-regular.woff2') format('woff2');
+  font-family: "Custom Font";
+  src: url("/fonts/custom-regular.woff2") format("woff2");
   font-weight: 400;
   font-display: swap; /* CRITICAL: show fallback, swap when loaded */
   unicode-range: U+0020-007E; /* ASCII range — split if CJK needed */
@@ -309,14 +340,14 @@ font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Monaco,
 
 ```css
 :root {
-  --text-xs:   0.75rem;    /* 12px */
-  --text-sm:   0.875rem;   /* 14px */
-  --text-base: 1rem;       /* 16px */
-  --text-lg:   1.125rem;   /* 18px */
-  --text-xl:   1.25rem;    /* 20px */
-  --text-2xl:  1.5rem;     /* 24px */
-  --text-3xl:  1.875rem;   /* 30px */
-  --text-4xl:  2.25rem;    /* 36px */
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px */
+  --text-lg: 1.125rem; /* 18px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-2xl: 1.5rem; /* 24px */
+  --text-3xl: 1.875rem; /* 30px */
+  --text-4xl: 2.25rem; /* 36px */
 }
 ```
 
@@ -325,10 +356,18 @@ font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Monaco,
 Use `clamp()` for fluid text that scales with viewport, not multiple breakpoints:
 
 ```css
-h1 { font-size: clamp(2rem, 1.5rem + 2.5vw, 3.5rem); }
-h2 { font-size: clamp(1.5rem, 1.25rem + 1.5vw, 2.5rem); }
-h3 { font-size: clamp(1.25rem, 1.1rem + 0.75vw, 1.75rem); }
-body { font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); }
+h1 {
+  font-size: clamp(2rem, 1.5rem + 2.5vw, 3.5rem);
+}
+h2 {
+  font-size: clamp(1.5rem, 1.25rem + 1.5vw, 2.5rem);
+}
+h3 {
+  font-size: clamp(1.25rem, 1.1rem + 0.75vw, 1.75rem);
+}
+body {
+  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+}
 ```
 
 **Reading width:** `max-width: 65ch` for body text (optimal for English). Up to `72rem` for mixed content with code blocks.
@@ -389,7 +428,9 @@ body { font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); }
 
 ```css
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -415,13 +456,13 @@ body { font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); }
 
 ### 5.1 Core Web Vitals Targets
 
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| LCP (Largest Contentful Paint) | < 2.5s | Main content visible |
+| Metric                          | Target  | Measurement          |
+| ------------------------------- | ------- | -------------------- |
+| LCP (Largest Contentful Paint)  | < 2.5s  | Main content visible |
 | INP (Interaction to Next Paint) | < 200ms | Input responsiveness |
-| CLS (Cumulative Layout Shift) | < 0.1 | Visual stability |
-| FCP (First Contentful Paint) | < 1.8s | First pixel |
-| TTFB (Time to First Byte) | < 800ms | Server response |
+| CLS (Cumulative Layout Shift)   | < 0.1   | Visual stability     |
+| FCP (First Contentful Paint)    | < 1.8s  | First pixel          |
+| TTFB (Time to First Byte)       | < 800ms | Server response      |
 
 ### 5.2 Image Strategy
 
@@ -429,10 +470,16 @@ body { font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); }
 
 ```html
 <picture>
-  <source srcset="hero.avif" type="image/avif">
-  <source srcset="hero.webp" type="image/webp">
-  <img src="hero.jpg" alt="Description" width="800" height="450"
-       loading="lazy" decoding="async">
+  <source srcset="hero.avif" type="image/avif" />
+  <source srcset="hero.webp" type="image/webp" />
+  <img
+    src="hero.jpg"
+    alt="Description"
+    width="800"
+    height="450"
+    loading="lazy"
+    decoding="async"
+  />
 </picture>
 ```
 
@@ -501,35 +548,38 @@ Verify these on every new page:
 
 ```html
 <!-- Required -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Page Title | Site Name</title>
-<meta name="description" content="Compelling, specific description. 150-160 chars.">
-<link rel="canonical" href="https://example.com/page-slug">
+<meta
+  name="description"
+  content="Compelling, specific description. 150-160 chars."
+/>
+<link rel="canonical" href="https://example.com/page-slug" />
 
 <!-- Open Graph -->
-<meta property="og:type" content="website|article">
-<meta property="og:url" content="https://example.com/page-slug">
-<meta property="og:site_name" content="Site Name">
-<meta property="og:title" content="Page Title">
-<meta property="og:description" content="Description">
-<meta property="og:image" content="https://example.com/assets/social.webp">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:type" content="website|article" />
+<meta property="og:url" content="https://example.com/page-slug" />
+<meta property="og:site_name" content="Site Name" />
+<meta property="og:title" content="Page Title" />
+<meta property="og:description" content="Description" />
+<meta property="og:image" content="https://example.com/assets/social.webp" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
 
 <!-- Twitter (X) -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:site" content="@handle">
-<meta name="twitter:title" content="Page Title">
-<meta name="twitter:description" content="Description">
-<meta name="twitter:image" content="https://example.com/assets/social.webp">
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@handle" />
+<meta name="twitter:title" content="Page Title" />
+<meta name="twitter:description" content="Description" />
+<meta name="twitter:image" content="https://example.com/assets/social.webp" />
 
 <!-- Article-specific (blog posts only) -->
-<meta property="article:published_time" content="2026-01-15T00:00:00.000Z">
-<meta property="article:author" content="Author Name">
-<meta property="article:section" content="Category">
-<meta property="article:tag" content="tag1">
-<meta property="article:tag" content="tag2">
+<meta property="article:published_time" content="2026-01-15T00:00:00.000Z" />
+<meta property="article:author" content="Author Name" />
+<meta property="article:section" content="Category" />
+<meta property="article:tag" content="tag1" />
+<meta property="article:tag" content="tag2" />
 ```
 
 ### 6.2 Structured Data (JSON-LD)
@@ -563,7 +613,10 @@ Verify these on every new page:
   "dateModified": "2026-01-15T00:00:00.000Z",
   "author": { "@type": "Person", "name": "Author Name" },
   "publisher": { "@type": "Person", "name": "Author Name" },
-  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://example.com/blog/slug" },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://example.com/blog/slug"
+  },
   "keywords": "tag1, tag2, category"
 }
 ```
@@ -622,8 +675,8 @@ Self-contained demo pages with IIFE scripts:
 2. Ensure re-execution on client-side navigation (ViewTransitions, etc.)
 3. Use `readyState` check instead of `DOMContentLoaded` for initialization:
    ```js
-   if (document.readyState === 'loading') {
-     document.addEventListener('DOMContentLoaded', init);
+   if (document.readyState === "loading") {
+     document.addEventListener("DOMContentLoaded", init);
    } else {
      init(); // Already loaded — ViewTransitions case
    }
@@ -659,31 +712,41 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; prelo
 **Option A: `prefers-color-scheme` only** (automatic, no toggle needed):
 
 ```css
-:root { --color-bg: #ffffff; --color-text: #1a1a1a; }
+:root {
+  --color-bg: #ffffff;
+  --color-text: #1a1a1a;
+}
 @media (prefers-color-scheme: dark) {
-  :root { --color-bg: #0a0a0a; --color-text: #e0e0e0; }
+  :root {
+    --color-bg: #0a0a0a;
+    --color-text: #e0e0e0;
+  }
 }
 ```
 
 **Option B: Class-based toggle** (user preference + system default):
 
 ```css
-:root { /* light theme */ }
-[data-theme="dark"] { /* dark theme */ }
+:root {
+  /* light theme */
+}
+[data-theme="dark"] {
+  /* dark theme */
+}
 ```
 
 ```js
 // Toggle with localStorage persistence
 const toggle = () => {
   const current = document.documentElement.dataset.theme;
-  const next = current === 'dark' ? 'light' : 'dark';
+  const next = current === "dark" ? "light" : "dark";
   document.documentElement.dataset.theme = next;
-  localStorage.setItem('theme', next);
+  localStorage.setItem("theme", next);
 };
 // Initialize: check localStorage, then system preference
-const saved = localStorage.getItem('theme');
-const system = window.matchMedia('(prefers-color-scheme: dark)').matches;
-document.documentElement.dataset.theme = saved || (system ? 'dark' : 'light');
+const saved = localStorage.getItem("theme");
+const system = window.matchMedia("(prefers-color-scheme: dark)").matches;
+document.documentElement.dataset.theme = saved || (system ? "dark" : "light");
 ```
 
 ### 9.2 Dark Mode Pitfalls
@@ -730,29 +793,29 @@ document.documentElement.dataset.theme = saved || (system ? 'dark' : 'light');
 
 A distinctive terminal aesthetic uses consistent visual language:
 
-| Element | Pattern | Example |
-|---------|---------|---------|
-| Page title | `$ command` format | `$ about`, `$ tools_of_the_trade` |
-| Navigation | Terminal prompt style | `user@host:~$` as site header |
-| Active nav | `[brackets]` | `[blog]`, `[projects]` |
-| Dim text | `> prefix` | `> 25+ years shipping production software` |
-| Links | Cyan/accent color | `text-terminal-cyan` or `var(--color-link)` |
-| Hover | Accent color transition | `hover:text-accent-green` |
-| Buttons | `[brackets]` with accent border | `[hire me]`, `[source]` |
-| Categories | `[brackets]` | `[Software Development]` |
-| Borders | Subtle border color | `border-terminal-border` or `var(--color-border)` |
-| Code blocks | Dark theme | Nord theme or similar dark palette |
-| Inline code | Accent on dark bg | Green on near-black |
+| Element     | Pattern                         | Example                                           |
+| ----------- | ------------------------------- | ------------------------------------------------- |
+| Page title  | `$ command` format              | `$ about`, `$ tools_of_the_trade`                 |
+| Navigation  | Terminal prompt style           | `user@host:~$` as site header                     |
+| Active nav  | `[brackets]`                    | `[blog]`, `[projects]`                            |
+| Dim text    | `> prefix`                      | `> 25+ years shipping production software`        |
+| Links       | Cyan/accent color               | `text-terminal-cyan` or `var(--color-link)`       |
+| Hover       | Accent color transition         | `hover:text-accent-green`                         |
+| Buttons     | `[brackets]` with accent border | `[hire me]`, `[source]`                           |
+| Categories  | `[brackets]`                    | `[Software Development]`                          |
+| Borders     | Subtle border color             | `border-terminal-border` or `var(--color-border)` |
+| Code blocks | Dark theme                      | Nord theme or similar dark palette                |
+| Inline code | Accent on dark bg               | Green on near-black                               |
 
 ### 11.2 Responsive Breakpoints
 
-| Name | Min-width | Use case |
-|------|-----------|----------|
-| `sm` | 640px | Two-column cards, larger touch targets |
-| `md` | 768px | Side-by-side layouts, wider nav |
-| `lg` | 1024px | Three-column grids, sidebar + content |
-| `xl` | 1280px | Max-width containers, wide layouts |
-| `2xl` | 1536px | Ultra-wide content |
+| Name  | Min-width | Use case                               |
+| ----- | --------- | -------------------------------------- |
+| `sm`  | 640px     | Two-column cards, larger touch targets |
+| `md`  | 768px     | Side-by-side layouts, wider nav        |
+| `lg`  | 1024px    | Three-column grids, sidebar + content  |
+| `xl`  | 1280px    | Max-width containers, wide layouts     |
+| `2xl` | 1536px    | Ultra-wide content                     |
 
 **Common content widths:**
 
@@ -774,14 +837,15 @@ A distinctive terminal aesthetic uses consistent visual language:
 When creating a new page, use this checklist:
 
 1. Prerender static content pages
-2. Set correct page title and description for SEO
-3. Add JSON-LD if it's a blog post or landing page
-4. Add OG/Twitter meta tags
-5. Set canonical URL
-6. Use appropriate content width (`max-w-3xl` for text, `max-w-5xl` for cards)
-7. Apply design system colors consistently
-8. Use semantic HTML (`<section>`, `<article>`, `<nav>`, `<main>`)
-9. Add `border-b` section dividers between sections
-10. Use `py-12` vertical padding for sections
-11. Verify accessibility (lang, alt, focus rings, skip link)
-12. Run linting/formatting pass before committing
+1. Set correct page title and description for SEO
+1. Add JSON-LD if it's a blog post or landing page
+1. Add OG/Twitter meta tags
+1. Set canonical URL
+1. Use appropriate content width (`max-w-3xl` for text, `max-w-5xl` for cards)
+1. Apply design system colors consistently
+1. Use semantic HTML (`<section>`, `<article>`, `<nav>`, `<main>`)
+1. Add `border-b` section dividers between sections
+1. Use `py-12` vertical padding for sections
+1. Verify accessibility (lang, alt, focus rings, skip link)
+1. Run linting/formatting pass before committing
+
